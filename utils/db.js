@@ -4,12 +4,12 @@ class DBClient {
     constructor () {
         // Get environment variables or user default values
         const host = process.env.DB_HOST || 'localhost';
-        const port = process.env.DB_HOST || 27017;
+        const port = process.env.DB_PORT || 27017;
         const database = process.env.DB_DATABASE || 'files_manager';
         // create connection url
-        const url = `mongodb: ||${host}:${port}`;
+        const url = `mongodb://${host}:${port}`;
         // Initialize mongoClient with url & options
-        this.client = new MongoClient(url, {useNewUrlParser:true, useUnifiedTopology:true});
+        this.client = new MongoClient(url, {useNewUrlParser: true, useUnifiedTopology: true});
         this.databaseName = database;
         this.db = null;
     }
