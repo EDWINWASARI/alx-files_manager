@@ -4,18 +4,18 @@ const redis = require('redis');
 // Define the redis client class
 class RedisClient {
     constructor() {
-        //Create the Redis client
+        // Create the Redis client
         this.client = redis.createClient();
         // Handle connection errors
         this.client.on('error', (error) =>{
-            console.error('Redis client Error:' , error);
+            console.error('Redis client Error:', error);
         });
         // Log successful connection
         this.client.on('connect', () =>{
             console.log('Connected to Redis Succesfuly');
         });
     }
-    //Method to check if Redis Connection is alive
+    // Method to check if Redis Connection is alive
     isAlive () {
         return this.client.connected;
     }
@@ -54,7 +54,7 @@ class RedisClient {
                 }
             });
         });
-    }
+    },
 }
 const redisClient = new RedisClient();
-module.exports = redisClient
+module.exports = redisClient;
