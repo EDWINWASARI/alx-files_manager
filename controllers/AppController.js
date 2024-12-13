@@ -1,36 +1,26 @@
-const redisClient = require('redis');
-const dbClient = require('mongodb');
+import redisClient from '../utils/redis';
+import dbClient from '../utils/db';
 
-// GET /status
-exports.getStatus = async (req, res) => {
-  try {
-    const redisStatus = await redisClient.ping();
-    const dbStatus = await dbClient.ping();
-
-    return res.status(200).json({
-      redis: redisStatus === 'PONG',
-      db: dbStatus === 'PONG',
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: 'Error checking the status of Redis or DB',
-    });
+class AppController {
+  static getStatus(request, response) {
+    try {
+      const redis = redisClient.isAlive();
+      const db = dbClient.isAlive();
+      response.status(200).send({ redis, db });
+    } catch (error) {
+      console.log(error);
+    }
   }
-};
 
-// GET /stats
-exports.getStats = async (req, res) => {
-  try {
-    const userCount = await dbClient.collection('users').countDocuments();
-    const fileCount = await dbClient.collection('files').countDocuments();
-
-    return res.status(200).json({
-      users: userCount,
-      files: fileCount,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: 'Error retrieving statistics',
-    });
+  static async getStats(request, response) {
+    try {
+      const users = await dbClient.nbUsers();
+      const files = await dbClient.nbFiles();
+      response.status(200).send({ users, files });
+    } catch (error) {
+      console.log(error);
+    }
   }
-};
+}
+
+export default AppController;
